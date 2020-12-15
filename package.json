@@ -1,0 +1,26 @@
+{
+  "name": "annotate-csv",
+  "version": "1.0.0",
+  "description": "An opinionated way to annotate csv files and a parser written in JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gsearched/annotate-csv.git"
+  },
+  "keywords": [
+    "CSV",
+    "Annotate",
+    "annotation",
+    "csv",
+    "parser"
+  ],
+  "author": "Wellness Researched",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gsearched/annotate-csv/issues"
+  },
+  "homepage": "https://github.com/gsearched/annotate-csv#readme"
+}

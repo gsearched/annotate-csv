@@ -1,0 +1,11 @@
+{
+    "indent": 4,
+    "onevar": false,
+    "curly": true,
+    "eqeqeq": false,
+    "eqnull": true,
+    "laxbreak": true,
+    "strict": "global",
+    "node": true,
+    "esversion": 6
+}
