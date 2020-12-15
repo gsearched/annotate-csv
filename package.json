@@ -23,4 +23,7 @@
     "url": "https://github.com/gsearched/annotate-csv/issues"
   },
   "homepage": "https://github.com/gsearched/annotate-csv#readme"
+  "dependencies": {
+    "csv-parser": "^2.3.0",
+  }
 }

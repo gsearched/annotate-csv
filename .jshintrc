@@ -7,5 +7,5 @@
     "laxbreak": true,
     "strict": "global",
     "node": true,
-    "esversion": 6
+    "esversion": 8
 }

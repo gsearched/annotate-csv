@@ -13,6 +13,37 @@ Parses Annotated CSV file and returns JavaScript Object
 
 Converts annotated CSV to JSON:
 
+### Errors
+
+Error messages potentially returned by library.
+
+* `File Not Found`: There was a problem locating the CSV file
+* `Reading CSV` : There was a problem reading the CSV file 
+
+
+#### NodeJS 
+
+The return object is in this shape:
+
+```
+{
+    hasError: false, // Were there errors 
+    errors: [...], // Array of errors encounted
+    annotation: {...}, // Javascript object containing parsed data
+}
+
+```
+An error object looks like:
+```
+{
+    error: 'Reading CSV', // Error Type 
+    rawException: '', // JSON.stringified output of exception caught 
+    additionalInfo: '', // Optional additional info about exception
+}
+```
+
+
+
 ## Sample Annotated CSV Format
 
 ```
@@ -64,7 +95,7 @@ An annotatated CSV's first line is #ANNOTATE_CSV followed by the version number,
 Annotations are the heart of this format. Sometimes a cell or multiple cells in a ccsv need additional explanation. There are two types of annotations, text, and abbreviations. A header cell or a content cell can be annotated. If multiple cells need to have the same annotation, duplicate the annotation for each cell, and the parser will recognize they are duplicates. 
 
 * `#ANNOTATION` : Is added to the first cell of a new row to signify that row of data contains annotations instead of data or header cells. 
-* `#ABBR:$ABBREVIATION$:$Annotation$ : A special annotation that allows the parser to know that the annotation is spelling an abbreviation used in the cell immediately above. The parser will search for the abbreviation in the data cell above and be able to annotate it specifically. 
+* `#ABBR:$ABBREVIATION$:$Annotation$` : A special annotation that allows the parser to know that the annotation is spelling an abbreviation used in the cell immediately above. The parser will search for the abbreviation in the data cell above and be able to annotate it specifically. 
 * Repeat Annotations : If an annotation needs to be applied to multiple data / header cells, repeat the annotation and the parser will recognize they are duplicates. 
 
 ### #METADATA Section
