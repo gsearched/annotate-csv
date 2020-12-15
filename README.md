@@ -63,43 +63,32 @@ An annotatated CSV's first line is #ANNOTATE_CSV followed by the version number,
 
 Annotations are the heart of this format. Sometimes a cell or multiple cells in a ccsv need additional explanation. There are two types of annotations, text, and abbreviations. A header cell or a content cell can be annotated. If multiple cells need to have the same annotation, duplicate the annotation for each cell, and the parser will recognize they are duplicates. 
 
-`#ANNOTATION`
-: Is added to the first cell of a new row to signify that row of data contains annotations instead of data or header cells. 
-`#ABBR:$ABBREVIATION$:$Annotation$
-: A special annotation that allows the parser to know that the annotation is spelling an abbreviation used in the cell immediately above. The parser will search for the abbreviation in the data cell above and be able to annotate it specifically. 
-Repeat Annotations
-: If an annotation needs to be applied to multiple data / header cells, repeat the annotation and the parser will recognize they are duplicates. 
+* `#ANNOTATION` : Is added to the first cell of a new row to signify that row of data contains annotations instead of data or header cells. 
+* `#ABBR:$ABBREVIATION$:$Annotation$ : A special annotation that allows the parser to know that the annotation is spelling an abbreviation used in the cell immediately above. The parser will search for the abbreviation in the data cell above and be able to annotate it specifically. 
+* Repeat Annotations : If an annotation needs to be applied to multiple data / header cells, repeat the annotation and the parser will recognize they are duplicates. 
 
 ### #METADATA Section
 
 The `#METADATA` section is the first part of the annotated csv file. This is where the title, citation, and citation url are stored.
 
-`#METADATA`
-: Signifies the start of the metadata section. *Required
-`#TITLE`
-: The name of the dataset. *Required
-`#CITATION`
-: A citation of where the dataset came from
-`#CITATION_URL`
-: The URL of where to find the original source
-`#LICENSE`
-: The license of the dataset
+* `#METADATA` : Signifies the start of the metadata section. *Required
+* `#TITLE` : The name of the dataset. *Required
+* `#CITATION` : A citation of where the dataset came from
+* `#CITATION_URL` : The URL of where to find the original source
+* `#LICENSE` : The license of the dataset
 
 
 ### #TABLE Section
 
 The table section is where the data in the data set is actually stored. The `#HEADER` annotation signifies that a data cell is a header and not actual data. Headers aand data cells can both be annotateed. If a header's value is repeated, the parser will recognize and will note 
 
-`#TABLE`
-: Signifies the start of the data set *Required
-`#HEADER`
-: Used to specify columns or rows that are headers. Column headers must be declared on the first line of the dataset. Row Headers can be declared on any row of the data set but the `#HEADER` annotation must be in the first cell of the row.
-Repeat Headers
-: If a header needs to span multiple cells, repeat the header and the parser will recognize it's a duplicate. If the header cell is left blank, it will be parsed as a blank header.
+* `#TABLE` : Signifies the start of the data set *Required
+* `#HEADER` : Used to specify columns or rows that are headers. Column headers must be declared on the first line of the dataset. Row Headers can be declared on any row of the data set but the `#HEADER` annotation must be in the first cell of the row.
+* Repeat Headers : If a header needs to span multiple cells, repeat the header and the parser will recognize it's a duplicate. If the header cell is left blank, it will be parsed as a blank header.
 
 ## JSON Format
 
 
 ## Sites using annotate-csv
 
-* (Wellness Researched)[https://wellnessresearched.com]
+* [Wellness Researched](https://wellnessresearched.com)
