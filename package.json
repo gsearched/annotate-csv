@@ -4,7 +4,7 @@
   "description": "An opinionated way to annotate csv files and a parser written in JavaScript",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_TEST=test ./index.js"
   },
   "repository": {
     "type": "git",
@@ -22,8 +22,8 @@
   "bugs": {
     "url": "https://github.com/gsearched/annotate-csv/issues"
   },
-  "homepage": "https://github.com/gsearched/annotate-csv#readme"
+  "homepage": "https://github.com/gsearched/annotate-csv#readme",
   "dependencies": {
-    "csv-parser": "^2.3.0",
+    "csv-parse": "^4.14.2"
   }
 }
