@@ -24,6 +24,8 @@
   },
   "homepage": "https://github.com/gsearched/annotate-csv#readme",
   "dependencies": {
-    "csv-parse": "^4.14.2"
-  }
+    "csv-parse": "^4.14.2",
+    "minimist": "1.2.5"
+  },
+  "devDependencies": {}
 }

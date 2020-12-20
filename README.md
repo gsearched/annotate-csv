@@ -13,6 +13,14 @@ Parses Annotated CSV file and returns JavaScript Object
 
 Converts annotated CSV to JSON:
 
+```
+$ annotate-csv --input ./input.csv ---output ./output.csv --delimiter "," 
+```
+
+#### Environmental Properties
+
+* `NODE_
+
 ### Errors
 
 Error messages potentially returned by library.
