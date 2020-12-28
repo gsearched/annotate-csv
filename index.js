@@ -7,6 +7,8 @@ const assert = require('assert');
 
 module.exports.annotateCSV = annotateCSV;
 
+let DEBUG_MODE = false;
+
 
 // Ran as test or shell script
 if (require.main === module) {
@@ -75,10 +77,22 @@ async function test() {
         passedTest = false;
     }
 
+    const invalidVersion = await annotateCSV('./test/invalidVersionCSVTest.csv', ',');
+    try {
+        assert.equal(invalidVersion.hasError, true);
+        assert.equal(invalidVersion.errors[0].error, 'VERSION_NOT_SUPPORTED');
+        console.log(`PASSED: Version Not Supported Error`);
+    } catch (e) {
+        console.log(e);
+        console.log(`FAILED: Version Not Supported Error`);
+        passedTest = false;
+    }
+
     const validCSV = await annotateCSV('./test/validCSVTest.csv', ',');
     try {
         assert.equal(validCSV.hasError, false);
         console.log(`PASSED: Parsing valid CSV`);
+        console.log(JSON.stringify(validCSV));
     } catch (e) {
         console.log(e);
         console.log(`FAILED: Parsing valid CSV`);
@@ -105,6 +119,12 @@ function getErrorCode(error) {
     if (error.code) {
         return error.code;
     }
+
+    console.log(`Unknown Error: ${JSON.stringify(error)}
+
+`);
+    console.log(error);
+    console.log(' ');
 
     return 'UNKNOWN';
 }
@@ -133,6 +153,11 @@ async function annotateCSV(inputFile, delimiter) {
     }
 
     if (errors.length > 0) {
+        if (DEBUG_MODE) {
+            console.log(`Found Following Errors: 
+            ${JSON.stringify(errors)}
+            `);
+        }
         hasError = true;
     }
 
@@ -169,10 +194,15 @@ async function rawCSVRows(inputFile, delimiter = ',') {
     });
 }
 
-const supportedVersions = ['1.0.0'];
+const supportedVersions = ['0.1.0'];
 
 function annotateRawRows(rawRows) {
-    const annotation = {};
+    const annotatedCSV = {
+        metadata: {},
+        rows: [],
+        annotations: [],
+    };
+
     const annotateHeader = (rawRows[0][0] || '').trim();
     const version = (rawRows[0][1] || 'UNKNOWN').trim();
 
@@ -206,16 +236,93 @@ function annotateRawRows(rawRows) {
         }
     });
 
-    annotation.metadata = getMetadata(rawMetaRows);
+    const { getAnnotationKey, getAnnotationArray } = createAnnotationKeyStore();
 
-    console.log(JSON.stringify(rawRows));
+    parseMetadataAndInsertAnnotated(rawMetaRows, annotatedCSV, getAnnotationKey);
+    parseTableAndInsertAnnotated(rawTableRows, annotatedCSV, getAnnotationKey);
+    annotatedCSV.annotations.push(...getAnnotationArray());
 
-    return annotation;
+    return annotatedCSV;
 }
 
-function getMetadata(metaRows) {
+/// Stores annotations 
+function createAnnotationKeyStore() {
+    const annotations = new Map();
+    let annotationCount = 0;
+    return {
+        getAnnotationKey: function getAnnotationKey(annotation) {
+            if (annotations.has(annotation)) {
+                return annotations.get(annotation);
+            } else {
+                annotations.set(annotation, annotationCount);
+                annotationCount++;
+                return annotations.get(annotation);
+            }
+        },
+        getAnnotationArray: function getAnnotationArray() {
+            console.log('ANNOTATIONS!!!!');
+            console.log ( `${[...annotations.keys()]}`);
+            return [...annotations.keys()];
+        }
+    };
+}
 
-    return {};
+function parseMetadataAndInsertAnnotated(rawMetaRows, annotatedCSV, getAnnotationKey) {
+    console.log('#METADATA ROWS');
+    rawMetaRows.forEach((rawMetaRow, index) => { 
+        const metaKey = getJSONMetadataKey(rawMetaRow[0]);
+
+        // If meta row is an annotation we need to loop backwards, in case of 
+        // multiple annotations for the same header to find the closest meta key.
+        // We then push the annotation key to the meta key
+        if (metaKey === 'annotation') {
+            const annotationKey = getAnnotationKey(rawMetaRow[1]);
+            let prevIndex = index;
+            let prevMetaKey = '';
+            do {
+                prevIndex--;
+                prevMetaKey = getJSONMetadataKey(rawMetaRows[prevIndex][0]); 
+            // Loop backwards to find first non annotated field
+            } while (prevMetaKey === 'annotation');
+
+            annotatedCSV.metadata[prevMetaKey].annotations.push(annotationKey);
+
+        } else if (metaKey === 'unknown') {
+            throw 'META_FIELD_UNKNOWN';
+        } else {
+            annotatedCSV.metadata[metaKey] = {
+                content: rawMetaRow[1],
+                annotations: [],
+            };
+        }
+    });
+    return annotatedCSV;
+}
+
+function getJSONMetadataKey(csvKey) {
+    switch (csvKey.trim()) {
+        case '#TITLE':
+            return 'title';
+        case '#CITATION':
+            return 'citation';
+        case '#ANNOTATION':
+            return 'annotation';
+        case '#CITATION_URL':
+            return 'citationUrl';
+        case '#LICENSE':
+            return 'license';
+        default:
+            return 'unknown';
+    }
+}
+
+function parseTableAndInsertAnnotated(rawTableRows, annotatedCSV) {
+    // NEED to loop through rows and find which ones are headers, need to determine
+    // cell JSON format 
+    // HEADERS
+
+
+    return annotatedCSV;
 }
 
 function helpMessage(errorMessage) {

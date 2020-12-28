@@ -1,6 +1,6 @@
 {
   "name": "annotate-csv",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "An opinionated way to annotate csv files and a parser written in JavaScript",
   "main": "index.js",
   "scripts": {

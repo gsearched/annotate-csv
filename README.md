@@ -55,7 +55,7 @@ An error object looks like:
 ## Sample Annotated CSV Format
 
 ```
-#ANNOTATE_CSV,1.0.0,https://github.com/gsearched/annotate-csv,,,,,,,,,,,
+#ANNOTATE_CSV,0.1.0,https://github.com/gsearched/annotate-csv,,,,,,,,,,,
 #METADATA,,,,,,,,,,,,,
 #TITLE,Average indoor environmental conditions simulated in each room of the TIEQ lab.,,,,,,,,,,,,
 #ANNOTATION,#ABBR:TIEQ:Total Indoor Environmental Quality lab,,,,,,,,,,,,
@@ -94,7 +94,7 @@ Metadata fields are prefixed by the `#` symbol. There are two primary sections t
 An annotatated CSV's first line is #ANNOTATE_CSV followed by the version number, and git repository location, followed by commas matching how many columns are in the document
 
 ```
-#ANNOTATE_CSV,1.0.0,https://github.com/gsearched/annotate-csv,,,,,,,,,,,
+#ANNOTATE_CSV,0.1.0,https://github.com/gsearched/annotate-csv,,,,,,,,,,,
 ```
 
 
