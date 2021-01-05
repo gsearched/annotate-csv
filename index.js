@@ -36,7 +36,7 @@ async function commandLine() {
 
         //commandLine(args.input, args.output, args.delimiter);
         const annotatedCSV = await annotateCSV(args.input, args.delimiter);
-        console.log(JSON.stringify(annotatedCSV));
+        console.log(JSON.stringify(annotatedCSV, null, 4));
     }
 }
 
@@ -92,7 +92,7 @@ async function test() {
     try {
         assert.equal(validCSV.hasError, false);
         console.log(`PASSED: Parsing valid CSV`);
-        console.log(JSON.stringify(validCSV));
+        console.log(JSON.stringify(validCSV, null, 4));
     } catch (e) {
         console.log(e);
         console.log(`FAILED: Parsing valid CSV`);
@@ -120,7 +120,7 @@ function getErrorCode(error) {
         return error.code;
     }
 
-    console.log(`Unknown Error: ${JSON.stringify(error)}
+    console.log(`Unknown Error: ${JSON.stringify(error, null, 4)}
 
 `);
     console.log(error);
@@ -131,11 +131,11 @@ function getErrorCode(error) {
 
 async function annotateCSV(inputFile, delimiter) {
     let hasError = false;
-    let annotation = {};
+    let content = {};
     const errors = [];
     try {
         const rawRows = await rawCSVRows(inputFile, delimiter);
-        annotation = annotateRawRows(rawRows);
+        content = annotateRawRows(rawRows);
     } catch (e) {
         if (Array.isArray(e)) {
             errors.push(...e.map((error) => {
@@ -155,7 +155,7 @@ async function annotateCSV(inputFile, delimiter) {
     if (errors.length > 0) {
         if (DEBUG_MODE) {
             console.log(`Found Following Errors: 
-            ${JSON.stringify(errors)}
+            ${JSON.stringify(errors, null, 4)}
             `);
         }
         hasError = true;
@@ -164,7 +164,7 @@ async function annotateCSV(inputFile, delimiter) {
     return {
         hasError,
         errors,
-        annotation
+        content
     };
 }
 
@@ -320,7 +320,12 @@ function parseTableAndInsertAnnotated(rawTableRows, annotatedCSV) {
     // NEED to loop through rows and find which ones are headers, need to determine
     // cell JSON format 
     // HEADERS
+    console.log('#DATA ROWS');
 
+    rawTableRows.forEach((rawTableRow, index) => {
+
+
+    });
 
     return annotatedCSV;
 }
@@ -354,6 +359,13 @@ function helpMessage(errorMessage) {
     and will output any errors it encounters. See 
     https://csv.js.org/parse/errors/ 
     for a list of possible errors and how to remedy. 
+
+    Additional Error messages potentially returned by the library:
+
+    * FILE_NOT_FOUND - Input file does not exist, or cannot be read
+    * META_FIELD_UNKNOWN - Metadata section of CSV contains unsupported field.
+    * MISSING_ANNOTATE_HEADER - The CSV file doesn't have the #ANNOTATE_CSV value in its first cell.
+    * VERSION_NOT_SUPPORTED - Annotate CSV version not supported
 
     `);
 

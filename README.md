@@ -1,7 +1,7 @@
 # annotate-csv
-Opinionated annotated csv format and parser written in Javascript that converts the annotated csv into JSON that can be more easily manipulated by programming languages.
+Opinionated annotated csv format and parser written in Javascript that converts an annotated csv file into JSON that can be more easily manipulated by programming languages.
 
-An annotated csv file has it's metadata embedded inside the CSV itself. This allows for the csv file to be the sole source of information about the data and eliminates the need to store metadata about the data in a separate system.
+An annotated csv file has it's metadata embedded inside the CSV itself. This allows for the csv file to be the sole source of information about the data and eliminates the need to store metadata about the csv file in a separate system.
 
 ## Using annotate-csv 
 
@@ -14,20 +14,27 @@ Parses Annotated CSV file and returns JavaScript Object
 Converts annotated CSV to JSON:
 
 ```
-$ annotate-csv --input ./input.csv ---output ./output.csv --delimiter "," 
+$ annotate-csv --input ./input.csv ---output ./output.json --delimiter "," 
 ```
 
-#### Environmental Properties
+#### Options:
 
-* `NODE_
+* --input The file location of the annotated csv file to parse *Required*
+* --output The file location of where to save the json output *Required*
+* --delimiter The CSV delimiter, defaults to "," *Optional*
+
+
 
 ### Errors
 
-Error messages potentially returned by library.
+Annotate-CSV uses the csv-parse library to do the initial parsing and will output any errors it encounters. See https://csv.js.org/parse/errors/ for a list of possible errors and how to remedy. 
 
-* `File Not Found`: There was a problem locating the CSV file
-* `Reading CSV` : There was a problem reading the CSV file 
+Additional Error messages potentially returned by the library:
 
+* FILE_NOT_FOUND - Input file does not exist, or cannot be read
+* META_FIELD_UNKNOWN - Metadata section of CSV contains unsupported field.
+* MISSING_ANNOTATE_HEADER - The CSV file doesn't have the #ANNOTATE_CSV value in its first cell.
+* VERSION_NOT_SUPPORTED - Annotate CSV version not supported
 
 #### NodeJS 
 
@@ -37,7 +44,7 @@ The return object is in this shape:
 {
     hasError: false, // Were there errors 
     errors: [...], // Array of errors encounted
-    annotation: {...}, // Javascript object containing parsed data
+    content: {...}, // Javascript object containing parsed data
 }
 
 ```
